@@ -14,13 +14,10 @@ const refs = {
 let query = '';
 let page = 1;
 let simpleLightBox;
-const per_page = 40;
+const perPage = 40;
 
 refs.searchForm.addEventListener('submit', onSearchForm);
 refs.loadMoreBtn.addEventListener('click', onLoadBtn);
-
-onScroll();
-onToTopBtn();
 
 function onSearchForm(event) {
   event.preventDefault();
@@ -34,7 +31,7 @@ function onSearchForm(event) {
     return;
   }
 
-  fetchImages(query, page, per_page)
+  fetchImages(query, page, perPage)
     .then(({ data }) => {
       if (data.totalHits === 0) {
         notFoundImg();
@@ -43,7 +40,7 @@ function onSearchForm(event) {
         simpleLightBox = new SimpleLightbox('.gallery a').refresh();
         howMuchImg(data);
 
-        if (data.totalHits > per_page) {
+        if (data.totalHits > perPage) {
           refs.loadMoreBtn.classList.remove('is-hidden');
         }
       }
@@ -58,12 +55,12 @@ function onLoadBtn() {
   page += 1;
   simpleLightBox.destroy();
 
-  fetchImages(query, page, per_page)
+  fetchImages(query, page, perPage)
     .then(({ data }) => {
       createCard(data.hits);
       simpleLightBox = new SimpleLightbox('.gallery a').refresh();
 
-      const totalPages = Math.ceil(data.totalHits / per_page);
+      const totalPages = Math.ceil(data.totalHits / perPage);
 
       if (page > totalPages) {
          refs.loadMoreBtn.classList.add('is-hidden');
@@ -78,13 +75,12 @@ function howMuchImg(data) {
 }
 
 function notEmptySearch() {
-  Notiflix.Notify.failure('The search string cannot be empty. Please specify your search query.');
+  Notiflix.Notify.failure("The search string cannot be empty. Please specify your search query.");
 }
 
 function notFoundImg() {
   Notiflix.Notify.failure(
-    'Sorry, there are no images matching your search query. Please try again.',
-  );
+    "Sorry, there are no images matching your search query. Please try again.");
 }
 
 function endImg() {
